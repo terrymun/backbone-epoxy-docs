@@ -2,11 +2,11 @@
 
 ## Quick links
 
-* [addFilter](#addFilter)
-* [addHandler](#addHandler)
-* [allowedParams](#allowedParams)
+* [addFilter](#addfilter)
+* [addHandler](#addhandler)
+* [allowedParams](#allowedparams)
 * [config](#config)
-* [emptyCache](#emptyCache)
+* [emptyCache](#emptycache)
 
 ## Overview
 
