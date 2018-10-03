@@ -3,33 +3,31 @@ Archived version of Backbone.Epoxy's documentation, original source at https://c
 
 ## Table of contents
 
-| [Epoxy.Model](#epoxymodel)    	| Epoxy.View      	| View Binding Handlers 	| View Binding Filters 	| Epoxy.binding 	|
-|----------------	|-----------------	|-----------------------	|----------------------	|---------------	|
-| [extend](#extend)         	| extend          	| attr                  	| all                  	| addFilter     	|
-| mixin          	| mixin           	| checked               	| any                  	| addHandler    	|
-| constructor    	| constructor     	| classes               	| csv                  	| allowedParams 	|
-| addComputed    	| binding context 	| collection            	| decimal              	| config        	|
-| clearComputeds 	| applyBindings   	| css                   	| format               	| emptyCache    	|
-| computeds      	| bindingFilters  	| disabled              	| integer              	|               	|
-| destroy        	| bindingHandlers 	| enabled               	| length               	|               	|
-| get            	| bindings        	| events                	| none                 	|               	|
-| getCopy        	| bindingSources  	| html                  	| not                  	|               	|
-| hasComputed    	| computeds       	| itemView              	| select               	|               	|
-| initComputeds  	| getBinding      	| options               	|                      	|               	|
-| modifyArray    	| remove          	| optionsDefault        	|                      	|               	|
-| modifyObject   	| removeBindings  	| optionsEmpty          	|                      	|               	|
-| removeComputed 	| setBinding      	| template              	|                      	|               	|
-| set            	| setterOptions   	| text                  	|                      	|               	|
-| toJSON         	| viewModel       	| toggle                	|                      	|               	|
-|                	|                 	| value                 	|                      	|               	|
+| [Epoxy.Model](#epoxymodel)        | [Epoxy.View](#epoxyview)              | [View Binding Handlers](#view-binding-handlers)   | [View Binding Filters](#view-binding-filters) | [Epoxy.binding](#epoxybinding)    |
+|---------------------------------- |-------------------------------------- |-------------------------------------------------- |---------------------------------------------- |---------------------------------- |
+| [extend](#extend)                 | [extend](#extend-1)                   | [attr](#attr)                                     | [all](#all)                                   | [addFilter](#addFilter)           |
+| [mixin](#mixin)                   | [mixin](#mixin-1)                     | [checked](#checked)                               | [any](#any)                                   | [addHandler](#addHandler)         |
+| [constructor](#constructor)       | [constructor](#constructor-1)         | [classes](#classes)                               | [csv](#csv)                                   | [allowedParams](#allowedParams)   |
+| [addComputed](#addComputed)       | [binding context](#binding-context)   | [collection](#collection)                         | [decimal](#decimal)                           | [config](#config)                 |
+| [clearComputeds](#clearComputeds) | [applyBindings](#applyBindings)       | [css](#css)                                       | [format](#format)                             | [emptyCache](#emptyCache)         |
+| [computeds](#computeds)           | [bindingFilters](#bindingFilters)     | [disabled](#disabled)                             | [integer](#integer)                           |                                   |
+| [destroy](#destroy)               | [bindingHandlers](#bindingHandlers)   | [enabled](#enabled)                               | [length](#length)                             |                                   |
+| [get](#get)                       | [bindings](#bindings)                 | [events](#events)                                 | [none](#none)                                 |                                   |
+| [getCopy](#getCopy)               | [bindingSources](#bindingSources)     | [html](#html)                                     | [not](#not)                                   |                                   |
+| [hasComputed](#hasComputed)       | [computeds](#computeds-1)             | [itemView](#itemView)                             | [select](#select)                             |                                   |
+| [initComputeds](#initComputeds)   | [getBinding](#getBinding)             | [options](#options)                               |                                               |                                   |
+| [modifyArray](#modifyArray)       | [remove](#remove)                     | [optionsDefault](#optionsDefault)                 |                                               |                                   |
+| [modifyObject](#modifyObject)     | [removeBindings](#removeBindings)     | [optionsEmpty](#optionsEmpty)                     |                                               |                                   |
+| [removeComputed](#removeComputed) | [setBinding](#setBinding)             | [template](#template)                             |                                               |                                   |
+| [set](#set)                       | [setterOptions](#setterOptions)       | [text](#text)                                     |                                               |                                   |
+| [toJSON](#toJSON)                 | [viewModel](#viewModel)               | [toggle](#toggle)                                 |                                               |                                   |
+|                                   |                                       | [value](#value)                                   |                                               |                                   |
 
 ## Epoxy.Model
 
 The Epoxy Model object extends `Backbone.Model`, providing a new model abstract to be extended into your application.
 
 The Epoxy model introduces computed attributes on top of Backbone's native model attributes. Computed attributes operate as accessors and mutators, where a computed attribute will **get** an assembled value derived from other model attributes, and will **set** one more more mutated values derived from an input. Computed attributes are virtualized properties of the model: they may be **get** and **set** just like normal model attributes, and will trigger `"change"` events on the model when modified, however they do not exist within the model's **attributes** table, nor will they be saved with model data. Computed model attributes exist only in memory for the lifespan of a model instance. Computed attributes bind themselves to their dependencies and will update themselves in response to any of their dependencies changing, and then in turn trigger their own `"change:attribute"` event on the model.
-
-### extend
 
 ### extend
 
@@ -65,9 +63,9 @@ Creates a new Epoxy.Model instance. When constructed, computeds may be passed as
 
 Adds a computed attribute to the model. Computed attributes operate as accessors and mutators, where a computed attribute will **get** an assembled value derived from other model attributes, and will **set** one more more mutated values derived from an input. Computeds bind themselves to their dependency attributes and will update themselves in response to any of their dependencies changing, then in turn trigger their own "change:attribute" event on the model.
 
-The **addComputed** method is called with an attribute name and a params object defining the following:
+<a name="addcomputed--params"></a>The **addComputed** method is called with an attribute name and a params object defining the following:
 
-*   **get:** _Required function; invoked in context of the model_. This getter function assembles its value based on other model attributes (native or computed), and then returns the generated value. If a deps param is also specified, then the dependency array will be mapped and injected as arguments into the getter function. Note that a getter function should always reference other model attributes using the model's **get** method (for [automatic dependency mapping](#model-computed-deps)).
+*   **get:** _Required function; invoked in context of the model_. This getter function assembles its value based on other model attributes (native or computed), and then returns the generated value. If a deps param is also specified, then the dependency array will be mapped and injected as arguments into the getter function. Note that a getter function should always reference other model attributes using the model's **get** method (for [automatic dependency mapping](#automatic-dependency-mapping)).
 *   **\[deps\]:** _Optional array_. An array of attribute names that the getter function depends on. When defined, the dependency attributes will be mapped and injected as arguments into the getter function. Technically this manual property mapping is only required if your getter contains unreachable values that would be missed by automatic dependency mapping (discussed below).
 *   **\[set\]:** _Optional function; invoked in context of the model_. A mutator function which receives a raw input value, and returns an object defining new key/value pairs to be merged into the model. Computed attributes declared without a **set** function are read-only.
 
@@ -90,7 +88,7 @@ model.set("formattedPrice", "$150");
 alert( model.get("price") ); // 150
 ```
 
-**Automatic Dependency Mapping**
+#### Automatic Dependency Mapping
 
 In the above example, \["price"\] is manually declared as a dependency of the computed getter (meaning the getter will need to update itself when "price" changes). While this manual declaration is a nice safety net, we could also exclude the deps param and just **get** the price attribute instead, allowing automatic dependency mapping to discover attribute relationships.
 
@@ -128,7 +126,7 @@ model.addComputed("displayName", function() {
 });
 ```
 
-**Storing Raw Values**
+#### Storing Raw Values
 
 A lesser use-case for computed attributes is the storage of additional raw model values. When a value is assigned to a computed, that value may be **get** and **set** through the model and will trigger change events, however it will not be stored in the model's attributes table, nor saved with model data. Raw values are defined as a computed attribute with a single {value:'myValue'} param.
 
@@ -141,7 +139,7 @@ model.set("rawValue", 200);
 alert( model.get("rawValue") ); // 200
 ```
 
-Use the **[computeds](#model-computeds)** hash to automatically initialize computed attributes on your model instances.
+Use the **[computeds](#computeds)** hash to automatically initialize computed attributes on your model instances.
 
 ### clearComputeds
 
@@ -153,7 +151,7 @@ Removes all computed properties on the model and cleans up their bound events. C
 
 `model.computeds`
 
-A hash table declaring computed attributes to be automatically added to a model instance by **initComputeds**. Uses **[addComputed](#model-add-computed)** to create computed attributes. Computeds may be declared with a [computed params](#model-computed-params) object, or as a getter function (uses [automatic dependency mapping](#model-computed-deps)).
+A hash table declaring computed attributes to be automatically added to a model instance by **initComputeds**. Uses **[addComputed](#addcomputed)** to create computed attributes. Computeds may be declared with a [computed params](#addcomputed--params) object, or as a getter function (uses [automatic dependency mapping](#automatic-dependency-mapping-with-computed-views)).
 
 ```js
 var ComputedModel = Backbone.Epoxy.Model.extend({
@@ -198,7 +196,7 @@ The Epoxy **get** method will first check for a computed attribute, then defers 
 
 `model.getCopy(attribute)`
 
-Gets a model attribute value (native or computed), and performs a shallow copy on any non-primitive values returned. This is useful for getting copies of Object and Array values that you plan to modify outside of the model, then resubmit with changes (remember that "change" events only trigger for non-primitive values when their identity changes). The **[modifyArray](#model-modify-array)** and **[modifyObject](#model-modify-object)** methods may also be used to perform object changes internally within the model.
+Gets a model attribute value (native or computed), and performs a shallow copy on any non-primitive values returned. This is useful for getting copies of Object and Array values that you plan to modify outside of the model, then resubmit with changes (remember that "change" events only trigger for non-primitive values when their identity changes). The **[modifyArray](#modifyarray)** and **[modifyObject](#modifyobject)** methods may also be used to perform object changes internally within the model.
 
 ### hasComputed
 
@@ -296,11 +294,11 @@ Creates a new Epoxy.View instance. The following attributes may be passed as opt
 
 `{$model:model, $collection:collection, [*attributes], [*computeds]}`
 
-To establish bindings, an Epoxy view generates a _binding context_ with routers mapping all available data sources, model attributes, and computed properties of the view. This compiled binding context serves as a router table for exchanging values between data sources and the view. Live values may be read and written through the binding context using the view's **[getBinding](#view-get-binding)** and **[setBinding](#view-set-binding)** methods.
+To establish bindings, an Epoxy view generates a _binding context_ with routers mapping all available data sources, model attributes, and computed properties of the view. This compiled binding context serves as a router table for exchanging values between data sources and the view. Live values may be read and written through the binding context using the view's **[getBinding](#getbinding)** and **[setBinding](#setbinding)** methods.
 
 As noted above, a binding context includes three sets of resources:
 
-*   **Data Sources**: these are instances of Backbone.Model and/or Backbone.Collection that provide themselves and their attributes to the view for binding. By default, an Epoxy view looks for three potential data sources: the view's **model** property, **viewModel** property, and its **collection** property. References to these data sources are automatically configured in the binding context as $model, $viewModel, and $collection. Additional models and collections may be added through the **[bindingSources](#view-binding-sources)** hash, and will be added to the context as "$sourceName".
+*   **Data Sources**: these are instances of Backbone.Model and/or Backbone.Collection that provide themselves and their attributes to the view for binding. By default, an Epoxy view looks for three potential data sources: the view's **model** property, **viewModel** property, and its **collection** property. References to these data sources are automatically configured in the binding context as $model, $viewModel, and $collection. Additional models and collections may be added through the **[bindingSources](#bindingSources)** hash, and will be added to the context as "$sourceName".
 *   **Model Attributes**: all Backbone.Model data sources will have their model attributes added to the binding context as well. For the view's primary **model** and **viewModel** properties, all attributes will be added using their normal names (ie: "attribute"). For additional models defined through **bindingSources**, each model's attributes will be aliased as "source\_attribute". Note that instances of Epoxy.Model will provide aliases to ALL attributes, including their computeds.
 *   **Computed View Properties**: all computed property functions defined in the view's computeds hash are the final values added into the binding context.
 
@@ -310,7 +308,7 @@ Be mindful of naming conflicts within the binding context. Attributes of the **m
 
 `view.applyBindings()`
 
-Removes any existing view bindings, then applies all bindings defined within the view's **bindings** object. All bindings are established using the view's **$el** as the display target, and the view's **model**, **collection**, and/or **bindingSources** properties as the data sources (see **[binding context](#view-binding-context)** for more information). A view with invalid display or data targets will apply no bindings. If the **bindings** object is a string, that string will be used as an attribute selector query for extracting bindings from the view's **$el** container.
+Removes any existing view bindings, then applies all bindings defined within the view's **bindings** object. All bindings are established using the view's **$el** as the display target, and the view's **model**, **collection**, and/or **bindingSources** properties as the data sources (see **[binding context](#binding-context)** for more information). A view with invalid display or data targets will apply no bindings. If the **bindings** object is a string, that string will be used as an attribute selector query for extracting bindings from the view's **$el** container.
 
 The **applyBindings** method is automatically called by the view constructor _after_ the view's **initialize** method runs. This allows the **initialize** step to make adjustments within the view prior to bindings being applied. You generally shouldn't need to call **applyBindings** manually.
 
@@ -320,7 +318,7 @@ Also note that view bindings are baked at the time they are applied. All relatio
 
 `view.bindingFilters`
 
-A hash table defining a view's custom binding filters. Binding filters are used to format model data for display within the view. While Epoxy includes a core set of basic [binding filters](#binding-filters) for common formatting operations; developers are also encouraged to extend their views with custom binding filters as needed.
+A hash table defining a view's custom binding filters. Binding filters are used to format model data for display within the view. While Epoxy includes a core set of basic [binding filters](#view-binding-filters) for common formatting operations; developers are also encouraged to extend their views with custom binding filters as needed.
 
 Filters are added with a name string and a filter function or methods object. All filter arguments are pre-processed, so you may safely use conditional logic in filters without breaking automated dependency maps. All filtering functions are called anonymously and operate in global scope.
 
@@ -365,7 +363,7 @@ var BindingView = Backbone.Epoxy.View.extend({
 
 `view.bindingHandlers`
 
-A hash table defining a view's custom binding handlers. Binding handlers are used to apply binding data to elements in the view. While Epoxy includes a core set of basic [binding handlers](#binding-handlers) for managing an element's content and formatting, developers are encouraged to extend their views with customized binding handlers as needed.
+A hash table defining a view's custom binding handlers. Binding handlers are used to apply binding data to elements in the view. While Epoxy includes a core set of basic [binding handlers](#view-binding-handlers) for managing an element's content and formatting, developers are encouraged to extend their views with customized binding handlers as needed.
 
 To declare binding handlers, define a new property on the **bindingHandlers** hash with a params object defining **set** and **get** function properties:
 
@@ -405,7 +403,7 @@ var BindingView = Backbone.Epoxy.View.extend({
 
 `view.bindings`
 
-A hash declaring the view's element-to-attribute binding scheme, or a string defining an element attribute to query from the view's DOM. All bindings are established using the view's **$el** reference as the display target, and the view's [binding context](#view-binding-context) as the data provider. A view missing its **$el** property and/or valid binding data will apply no bindings.
+A hash declaring the view's element-to-attribute binding scheme, or a string defining an element attribute to query from the view's DOM. All bindings are established using the view's **$el** reference as the display target, and the view's [binding context](#binding-context) as the data provider. A view missing its **$el** property and/or valid binding data will apply no bindings.
 
 The bindings hash syntax keeps all binding declarations within the view. The **bindings** object declares a set of key/value pairs, where the key defines an element query, and the value defines the element's model bindings. A custom ":el" pseudo-selector may be used for the view's main **$el** member:
 
@@ -482,9 +480,9 @@ A note about Collection sources: Epoxy bindings do not register a "change" event
 
 `view.computeds`
 
-A hash table defining a view's computed properties. Computed view properties act as custom data routers: they assemble custom values from data available in the [binding context](#view-binding-context), and route formatted values. While this is conceptually similar to computed model attributes, computed view properties are unique in that they do not store their own data, nor do they trigger any events; they simply act as pass-throughs for modifying context data using the view's getBinding and setBinding API methods. Computed view properties are an excellent place to assemble view-specific display values and/or markup.
+A hash table defining a view's computed properties. Computed view properties act as custom data routers: they assemble custom values from data available in the [binding context](#binding-context), and route formatted values. While this is conceptually similar to computed model attributes, computed view properties are unique in that they do not store their own data, nor do they trigger any events; they simply act as pass-throughs for modifying context data using the view's getBinding and setBinding API methods. Computed view properties are an excellent place to assemble view-specific display values and/or markup.
 
-Computed view properties may be declared with a [computed params](#view-computed-params) object, or as a getter function (uses [automatic dependency mapping](#view-computed-deps)). Computed view functions are called in the context of the view, so referencing this refers to the parent view.
+Computed view properties may be declared with a [computed params](#computed-params) object, or as a getter function (uses [automatic dependency mapping](#automatic-dependency-mapping)). Computed view functions are called in the context of the view, so referencing this refers to the parent view.
 
 ```js
 var MyView = Backbone.Epoxy.View.extend({
@@ -509,11 +507,11 @@ var MyView = Backbone.Epoxy.View.extend({
 
 When declaring a computed view property using a params object, the following options may be provided:
 
-*   **get:** _Required function; invoked in context of the view_. This getter function assembles its value based on other data in the view context, then returns the generated value. If a deps option is also specified, then the dependency values are mapped and injected as arguments into the getter function. If dependencies are not manually specified, then the **getBinding** method must be used for data access (for [automatic dependency mapping](#view-computed-deps)).
+*   **get:** _Required function; invoked in context of the view_. This getter function assembles its value based on other data in the view context, then returns the generated value. If a deps option is also specified, then the dependency values are mapped and injected as arguments into the getter function. If dependencies are not manually specified, then the **getBinding** method must be used for data access (for [automatic dependency mapping](#automatic-dependency-mapping-with-computed-views)).
 *   **\[deps\]:** _Optional array_. An array of context attribute names that the getter function depends on. When provided, these dependency values will be mapped and injected as arguments into the getter function.
 *   **\[set\]:** _Optional function; invoked in context of the view_. A function that receives an input value for storage. The **set** method provides no protocol for data storage – storage is entirely dependent on your setter implementation. Use **setBinding** to write data into view sources. Computed view properties declared without a **set** function are read-only.
 
-**Automatic dependency mapping with computed views**
+#### Automatic dependency mapping with computed views
 
 Like computed model attributes, computed view properties must map dependencies between view bindings and their underlying data values to keep the display in sync. You may manually declare dependencies using a params object (see above), or use the following guidelines for automatic dependency mapping:
 
@@ -524,7 +522,7 @@ Like computed model attributes, computed view properties must map dependencies b
 
 `view.getBinding(attribute)`
 
-Gets data through the view's [binding context](#view-binding-context). The **getBinding** method may request any data attribute name available to binding declarations. This applies to data sources (referenced as "$source"), model attributes (referenced as "attribute" or "source\_attribute"), and [computed view properties](#view-computeds).
+Gets data through the view's [binding context](#view-binding-context). The **getBinding** method may request any data attribute name available to binding declarations. This applies to data sources (referenced as "$source"), model attributes (referenced as "attribute" or "source\_attribute"), and [computed view properties](#computeds-1).
 
 ### remove
 
