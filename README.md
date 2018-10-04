@@ -1,6 +1,6 @@
 # Backbone.Epoxy documentation
 
-👉 https://terrymun.github.io/backbone-epoxy-docs/ 👈
+👉 [View it on GitHub pages](https://terrymun.github.io/backbone-epoxy-docs/) 👈
 
 ## What is this?
 
