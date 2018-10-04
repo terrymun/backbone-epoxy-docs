@@ -4,7 +4,7 @@
 
 ## What is this?
 
-Cleaned up version of Backbone.Epoxy's documentation, original source at https://codepen.io/anon/pen/aYMxJM. HTML to Markdown conversion done using [Turndown](http://domchristie.github.io/turndown/) with manual clean up of internal links and anchors.
+Cleaned up version of Backbone.Epoxy's documentation, original source at [https://codepen.io/anon/pen/aYMxJM](https://codepen.io/anon/pen/aYMxJM). HTML to Markdown conversion done using [Turndown](http://domchristie.github.io/turndown/) with manual clean up of internal links and anchors.
 
 ## Quick links
 
